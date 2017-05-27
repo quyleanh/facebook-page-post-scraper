@@ -10,6 +10,7 @@ except ImportError:
 app_id = "<FILL IN>"
 app_secret = "<FILL IN>"  # DO NOT SHARE WITH ANYONE!
 page_id = "cnn"
+num_gotten_post = 1000    # Maximum number of scrap post
 
 access_token = app_id + "|" + app_secret
 
@@ -154,9 +155,14 @@ def scrapeFacebookPageFeedStatus(page_id, access_token):
                     w.writerow(status_data + reactions_data)
 
                 num_processed += 1
+                num_gotten_post -= 1
                 if num_processed % 100 == 0:
                     print("{} Statuses Processed: {}".format
                           (num_processed, datetime.datetime.now()))
+                if num_gotten_post == 0:
+                    print("\nDone!\n%s Statuses Processed in %s" % \
+                    (num_processed, datetime.datetime.now() - scrape_starttime))
+                    return
 
             # if there is no next page, we're done.
             if 'paging' in statuses:
